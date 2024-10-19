@@ -8,6 +8,7 @@ function App() {
   const [countries, setCountries] = useState([])
   const [searchTerm, setSearchTerm] = useState('')
   const [filteredCountries, setFilteredCountries] = useState([])
+  const [weather, setWeather] = useState(null)
 
   useEffect(() => {
     apiService
@@ -16,6 +17,16 @@ function App() {
         console.log('error' + error)
       })
   }, [])
+
+  useEffect(() => {
+    if (filteredCountries.length===1){
+    weatherApiService
+    .getAll(filteredCountries[0]).then((response) => setWeather(response))
+    .catch((error) => {
+      console.log('error' + error)
+    })
+    }
+  }, [filteredCountries])
 
   const search = (event) => {
     const newSearchTerm = event.target.value
@@ -36,7 +47,7 @@ function App() {
       </label>
       {filteredCountries.length > 10 && <p>hae lisää</p>}
       {filteredCountries.length <= 10 && filteredCountries.length > 1 && <CountryList countries={filteredCountries} showInfoHandler={showInfoHandler} />}
-      {filteredCountries.length == 1 && <CountryInfo country={filteredCountries[0]} weatherApi={weatherApiService} />}
+      {filteredCountries.length == 1 && <CountryInfo country={filteredCountries[0]} weather={weather} />}
     </div>
   )
 }
