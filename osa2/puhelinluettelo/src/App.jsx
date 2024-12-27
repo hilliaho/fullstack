@@ -87,9 +87,10 @@ const App = () => {
             setNotification(null)
           }, 3000)
         })
-        .catch((error) => {
+        .catch(error => {
+          console.log(error.response?.data?.error || "Failed to add number")
           setErrorMessage(
-            'Failed to add person'
+            error.response?.data?.error || "Failed to add number"
           )
           setTimeout(() => {
             setErrorMessage(null)
