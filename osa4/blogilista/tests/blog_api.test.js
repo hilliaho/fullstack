@@ -23,10 +23,27 @@ test('right amount of blogs are returned as json', async () => {
     assert.strictEqual(response.body.length, initialBlogs.length)
 })
 
-test.only('identifier field name is id', async () => {
+test('identifier field name is id', async () => {
     const allBlogs = await blogsInDb()
     const keys = Object.keys(allBlogs[0])
     assert(!keys.includes("_id") && keys.includes("id"))
+})
+
+test.only('adding a blog increases the amount of blogs by one', async () => {
+    const newBlog = {
+        "title": "blog",
+        "author": "blogger",
+        "url": "www.blog.fi",
+        "likes": 3
+      }
+    const blogsAtStart = await blogsInDb()
+    await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+    const blogsAfter = await blogsInDb()
+    assert.strictEqual(blogsAtStart.length+1, blogsAfter.length)
 })
 
 after(async () => {
