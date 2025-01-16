@@ -58,7 +58,6 @@ test('likes field gets value 0 if it is left empty', async () => {
   .expect(201)
   .expect('Content-Type', /application\/json/)
   const blogsAfter = await blogsInDb()
-  console.log('blog: ', blogsAfter[blogsAtStart.length])
   assert.strictEqual(blogsAfter[blogsAtStart.length]['likes'], 0)
 })
 
@@ -82,6 +81,15 @@ test('http post returns code 400 if new blog doesnt have url field', async () =>
   await api.post('/api/blogs')
   .send(newBlog)
   .expect(400)
+})
+
+test('deleting a blog decreases the blog count by one', async () => {
+  const blogsAtStart = await blogsInDb()
+  const id = blogsAtStart[0]['id']
+  await api.delete(`/api/blogs/${id}`)
+  .expect(204)
+  const blogsAfter = await blogsInDb()
+  assert.strictEqual(blogsAfter.length, blogsAtStart.length-1)
 })
 
 after(async () => {
