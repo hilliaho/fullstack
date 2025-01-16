@@ -29,7 +29,7 @@ test('identifier field name is id', async () => {
     assert(!keys.includes("_id") && keys.includes("id"))
 })
 
-test.only('adding a blog increases the amount of blogs by one', async () => {
+test('adding a blog increases the amount of blogs by one', async () => {
     const newBlog = {
         "title": "blog",
         "author": "blogger",
@@ -44,6 +44,22 @@ test.only('adding a blog increases the amount of blogs by one', async () => {
     .expect('Content-Type', /application\/json/)
     const blogsAfter = await blogsInDb()
     assert.strictEqual(blogsAtStart.length+1, blogsAfter.length)
+})
+
+test.only('likes field gets value 0 if it is left empty', async () => {
+  const blogsAtStart = await blogsInDb()
+  const newBlog = {
+      "title": "blog",
+      "author": "blogger",
+      "url": "www.blog.fi"
+  }
+  await api.post('/api/blogs')
+  .send(newBlog)
+  .expect(201)
+  .expect('Content-Type', /application\/json/)
+  const blogsAfter = await blogsInDb()
+  console.log('blog: ', blogsAfter[blogsAtStart.length])
+  assert.strictEqual(blogsAfter[blogsAtStart.length]['likes'], 0)
 })
 
 after(async () => {
