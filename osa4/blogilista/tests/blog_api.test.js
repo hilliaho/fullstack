@@ -46,7 +46,7 @@ test('adding a blog increases the amount of blogs by one', async () => {
     assert.strictEqual(blogsAtStart.length+1, blogsAfter.length)
 })
 
-test.only('likes field gets value 0 if it is left empty', async () => {
+test('likes field gets value 0 if it is left empty', async () => {
   const blogsAtStart = await blogsInDb()
   const newBlog = {
       "title": "blog",
@@ -60,6 +60,28 @@ test.only('likes field gets value 0 if it is left empty', async () => {
   const blogsAfter = await blogsInDb()
   console.log('blog: ', blogsAfter[blogsAtStart.length])
   assert.strictEqual(blogsAfter[blogsAtStart.length]['likes'], 0)
+})
+
+test('http post returns code 400 if new blog doesnt have title field', async () => {
+  const newBlog = {
+    "author": "blogger",
+    "url": "www.blog.fi",
+    "likes": 1
+  }
+  await api.post('/api/blogs')
+  .send(newBlog)
+  .expect(400)
+})
+
+test('http post returns code 400 if new blog doesnt have url field', async () => {
+  const newBlog = {
+    "title": "blog",
+    "author": "blogger",
+    "likes": 1
+  }
+  await api.post('/api/blogs')
+  .send(newBlog)
+  .expect(400)
 })
 
 after(async () => {
