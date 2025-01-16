@@ -92,6 +92,24 @@ test('deleting a blog decreases the blog count by one', async () => {
   assert.strictEqual(blogsAfter.length, blogsAtStart.length-1)
 })
 
+test.only('blog values change when blog is updated', async () => {
+  const blogsAtStart = await blogsInDb()
+  const blog = blogsAtStart[0]
+  const newBlog = {
+    "title": blog.title,
+    "author": blog.author,
+    "url": blog.url,
+    "likes": blog.likes + 1,
+    "id": blog.id
+  }
+  const id = blog['id']
+  await api.put(`/api/blogs/${id}`)
+  .send(newBlog)
+  .expect(200)
+  const blogsAfter = await blogsInDb()
+  assert.strictEqual(blogsAfter[0].likes, blogsAtStart[0].likes + 1)
+})
+
 after(async () => {
   await mongoose.connection.close()
 })
