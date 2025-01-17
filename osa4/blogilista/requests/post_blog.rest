@@ -3,7 +3,7 @@ Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlVzZXIiLCJpZCI6IjY3OGExNGE3NDAzMjVmYjcwYTRkM2FmZCIsImlhdCI6MTczNzEwNDA1MX0.tIfbwAhqjCNzjIl1ComreMeWeRfZ6qykXEMENriYo0Q
 
 {
-    "title": "Fifth blog post",
+    "title": "Sixth blog post",
     "author": "Poster",
     "url": "www.blog.fi",
     "likes": "0"
