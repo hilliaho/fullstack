@@ -41,8 +41,6 @@ blogsRouter.delete('/:id', async (request, response) => {
     const user = request.user
     const blog = await Blog.findById(request.params.id)
     const userId = blog.user.toString()
-    console.log("user.id: ", user.id)
-    console.log("userId: ", userId)
     if(user.id === userId) {
         await Blog.findByIdAndDelete(request.params.id)
         response.status(204).end()
@@ -53,7 +51,6 @@ blogsRouter.delete('/:id', async (request, response) => {
 
 blogsRouter.put('/:id', async (request, response) => {
     const body = request.body
-    const user = request.user
 
     const blog = {
         title: body.title,
@@ -61,7 +58,6 @@ blogsRouter.put('/:id', async (request, response) => {
         url: body.url,
         likes: body.likes,
         id: body.id,
-        user: user.id
     }
     const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, {new: true}).populate('user', {username: 1, name: 1})
     response.status(200).json(updatedBlog)
