@@ -22,7 +22,7 @@ blogsRouter.post('/', async (request, response) => {
     const body = request.body
     const user = request.user
     if (!user) {
-        response.status(401).end()
+        response.status(403).json({error: 'user missing'})
     }
     const blog = new Blog({
         title: body.title,
@@ -63,7 +63,7 @@ blogsRouter.put('/:id', async (request, response) => {
         id: body.id,
         user: user.id
     }
-    const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, {new: true})
+    const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, {new: true}).populate('user', {username: 1, name: 1})
     response.status(200).json(updatedBlog)
 })
 
