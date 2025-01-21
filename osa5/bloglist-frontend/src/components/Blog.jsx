@@ -38,7 +38,7 @@ const Blog = ({ blog, updateBlog, removeBlog, user }) => {
     }
   }
 
-  const userOwnsBlog = user.username === blog.user.username
+  const userOwnsBlog = user?.username === blog?.user?.username
 
   return(
     <div style={blogStyle}>
