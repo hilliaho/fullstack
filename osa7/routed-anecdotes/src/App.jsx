@@ -1,8 +1,10 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import { useState } from 'react'
 import {
   BrowserRouter as Router,
 Routes, Route, Link, useParams, useNavigate} from 'react-router-dom'
+import { useField } from './hooks'
 
 const AnecdoteList = ({ anecdotes }) => (
   <div>
@@ -52,21 +54,32 @@ const Footer = () => (
 
 const CreateNew = (props) => {
   const navigate = useNavigate()
-  const [content, setContent] = useState('')
-  const [author, setAuthor] = useState('')
-  const [info, setInfo] = useState('')
+  const content = useField('text')
+  const author = useField('text')
+  const info = useField('text')
 
   const handleSubmit = (e) => {
     e.preventDefault()
     props.addNew({
-      content,
-      author,
-      info,
+      content: content.value,
+      author: author.value,
+      info: info.value,
       votes: 0
     })
     navigate("/anecdotes")
 
   }
+
+  const handleReset = () => {
+    content.reset()
+    author.reset()
+    info.reset()
+  }
+
+  const { reset: r, ...newContent} = content
+  const { reset: a, ...newAuthor} = author
+  const { reset: i, ...newInfo} = info
+
 
   return (
     <div>
@@ -74,21 +87,21 @@ const CreateNew = (props) => {
       <form onSubmit={handleSubmit}>
         <div>
           content
-          <input name='content' value={content} onChange={(e) => setContent(e.target.value)} />
+          <input {...newContent} />
         </div>
         <div>
           author
-          <input name='author' value={author} onChange={(e) => setAuthor(e.target.value)} />
+          <input {...newAuthor} />
         </div>
         <div>
           url for more info
-          <input name='info' value={info} onChange={(e)=> setInfo(e.target.value)} />
+          <input {...newInfo} />
         </div>
         <button>create</button>
       </form>
+      <button onClick={handleReset}>reset</button>
     </div>
   )
-
 }
 
 const App = () => {
