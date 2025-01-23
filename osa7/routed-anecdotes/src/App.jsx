@@ -117,6 +117,10 @@ const App = () => {
   const addNew = (anecdote) => {
     anecdote.id = Math.round(Math.random() * 10000)
     setAnecdotes(anecdotes.concat(anecdote))
+    setNotification(`a new anecdote ${anecdote.content} created`)
+    setTimeout(() => {
+      setNotification('')
+    }, 5000)
   }
 
   const anecdoteById = (id) =>
@@ -143,6 +147,10 @@ const App = () => {
         <Link style={padding} to="/">home</Link>
         <Link style={padding} to="/anecdotes">anecdotes</Link>
         <Link style={padding} to="/create">create new</Link>
+      </div>
+
+      <div>
+        <p>{notification}</p>
       </div>
 
       <Routes>
